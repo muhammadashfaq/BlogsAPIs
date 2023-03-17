@@ -7,7 +7,6 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
-// Body parser, reading data from body into req.body
 app.use(express.json({limit: '10kb'}));
 app.use(express.urlencoded({extended: true, limit: '10kb'}));
 app.use(cookieParser());
@@ -15,7 +14,7 @@ app.use(cookieParser());
 app.use('/api/v1/blogs', blogRouter);
 app.use('/api/v1/users', userRouter);
 
-app.all('*', (req, res, next) => {
+app.all('*', (req, _res, next) => {
  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 

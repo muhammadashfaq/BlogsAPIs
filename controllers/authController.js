@@ -1,11 +1,8 @@
 const {promisify} = require('util');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
-
-const saltRounds = 10; // increase this number to increase the security level
 
 const signToken = (id) => {
  return jwt.sign({id}, process.env.JWT_SECRET, {
