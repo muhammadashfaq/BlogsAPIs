@@ -7,9 +7,6 @@ const router = express.Router();
 router.route('/').get(blogController.getAll);
 router.route('/:id').get(blogController.getBlog);
 
-// Protect all routes after this middleware
-// router.use(authController.protect);
-
 router.route('/').post(authController.protect, blogController.createBlog);
 router
  .route('/:id')
