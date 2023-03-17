@@ -1,8 +1,11 @@
 const {promisify} = require('util');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
+
+const saltRounds = 10; // increase this number to increase the security level
 
 const signToken = (id) => {
  return jwt.sign({id}, process.env.JWT_SECRET, {
@@ -10,7 +13,7 @@ const signToken = (id) => {
  });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, res) => {
  const token = signToken(user._id);
  const cookieOptions = {
   expires: new Date(
@@ -38,13 +41,18 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
+ const {name, email, password, confirmPassword} = req.body;
+
+ if (password !== confirmPassword)
+  return next(new AppError('Password and confirm Password do not match!', 400));
+
  const newUser = await User.create({
-  name: req.body.name,
-  email: req.body.email,
-  password: req.body.password,
-  passwordConfirm: req.body.passwordConfirm,
+  name: name,
+  email: email,
+  password: password,
  });
 
+ await newUser?.save();
  createSendToken(newUser, 201, res);
 });
 
@@ -79,8 +87,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.headers.authorization.startsWith('Bearer')
  ) {
   token = req.headers.authorization.split(' ')[1];
- } else if (req.cookies.jwt) {
-  token = req.cookies.jwt;
  }
 
  if (!token) {
@@ -97,13 +103,6 @@ exports.protect = catchAsync(async (req, res, next) => {
  if (!currentUser) {
   return next(
    new AppError('The user belonging to this token does no longer exist.', 401)
-  );
- }
-
- // 4) Check if user changed password after the token was issued
- if (currentUser.changedPasswordAfter(decoded.iat)) {
-  return next(
-   new AppError('User recently changed password! Please log in again.', 401)
   );
  }
 

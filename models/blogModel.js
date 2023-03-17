@@ -6,13 +6,19 @@ const blogSchema = new mongoose.Schema({
   required: [true, 'Title is required for blog'],
  },
  author: {
-  type: String,
-  required: [true, 'Author is required for blog'],
+  type: mongoose.Schema.ObjectId,
+  ref: 'User',
  },
  content: {
   type: String,
   required: [true, 'Content is required for blog'],
  },
+});
+
+blogSchema.pre(/^find/, function () {
+ this.populate({
+  path: 'author',
+ });
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

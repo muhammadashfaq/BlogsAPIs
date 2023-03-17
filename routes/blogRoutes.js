@@ -8,12 +8,12 @@ router.route('/').get(blogController.getAll);
 router.route('/:id').get(blogController.getBlog);
 
 // Protect all routes after this middleware
-router.use(authController.protect);
+// router.use(authController.protect);
 
-router.route('/').post(blogController.createBlog);
+router.route('/').post(authController.protect, blogController.createBlog);
 router
  .route('/:id')
- .patch(blogController.updateBlog)
- .delete(blogController.deleteBlog);
+ .patch(authController.protect, blogController.updateBlog)
+ .delete(authController.protect, blogController.deleteBlog);
 
 module.exports = router;
