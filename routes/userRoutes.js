@@ -10,17 +10,10 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
 router.post('/uploadProfilePicture', upload.single('image'), (req, res) => {
- if (!req.file) {
-  console.log('No file received');
-  return res.send({
-   success: false,
-  });
- } else {
-  console.log('file received');
-  return res.send({
-   success: true,
-  });
- }
+ res.status(200).json({
+  status: 'success',
+  message: 'Image uploaded',
+ });
 });
 
 router.post('/forgotPassword', authController.forgotPassword);

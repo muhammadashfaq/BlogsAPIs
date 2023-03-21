@@ -2,15 +2,11 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
- destination: function (req, file, cb) {
-  cb(null, path.join(__dirname, 'uploads')); // set the destination folder for the uploaded file
+ destination: function (_req, _file, cb) {
+  cb(null, 'uploads');
  },
- filename: function (req, file, cb) {
-  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9); // generate a unique filename to prevent overwriting
-  cb(
-   null,
-   file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)
-  ); // set the filename for the uploaded file
+ filename: function (_req, file, cb) {
+  cb(null, Date.now() + path.extname(file.originalname));
  },
 });
 
