@@ -16,14 +16,35 @@ app.use(express.urlencoded({extended: true, limit: '10kb'}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const posts = [
+ {
+  id: 1,
+  title: 'My First Blog Post',
+  content:
+   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut ligula eu tortor tincidunt sodales.',
+ },
+ {
+  id: 2,
+  title: 'My Second Blog Post',
+  content:
+   'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
+ },
+ {
+  id: 3,
+  title: 'My Third Blog Post',
+  content:
+   'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
+ },
+];
+
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
- res.render('pages/home');
+ res.render('pages/home', {posts: posts});
 });
 
 app.get('/home', (req, res) => {
- res.render('pages/home');
+ res.render('pages/home', {posts: posts});
 });
 
 app.get('/login', (req, res) => {

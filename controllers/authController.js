@@ -21,12 +21,7 @@ const createSendToken = async (user, statusCode, res) => {
   httpOnly: true,
  };
  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
- console.log('[token]', token);
- console.log('[cookieOptions]', cookieOptions);
-
  res.cookie('jwt', token, cookieOptions);
-
  // Remove password from output
  user.password = undefined;
 
