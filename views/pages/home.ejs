@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Home Page</title>
+    <!-- <link rel="stylesheet" href="/stylesheets/home.css" /> -->
+</head>
+
+<body>
+    <header>
+        <h1>My Blog</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts">Posts</a></li>
+                <li><a href="/about">About</a></li>
+                <% if (user) { %>
+                    <li><a href="/logout">Logout</a></li>
+                    <% } else { %>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/signup">Signup</a></li>
+                        <% } %>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Latest Posts</h2>
+            <ul>
+                <% posts.forEach(function(post) { %>
+                    <li>
+                        <h3><a href="/posts/<%= post.id %>">
+                                <%= post.title %>
+                            </a></h3>
+                        <p>
+                            <%= post.excerpt %>
+                        </p>
+                    </li>
+                    <% }); %>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 My Blog</p>
+    </footer>
+</body>
+
+</html>
